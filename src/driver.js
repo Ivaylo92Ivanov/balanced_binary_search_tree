@@ -3,32 +3,28 @@ import prettyPrint from "./prettyPrint";
 
 
 export default function driver() {
-  let a = new Tree([25, 15, 10, 4, 12, 22, 18, 24, 50, 35, 31, 44, 70, 66, 90]) // [25, 15, 10, 4, 12, 22, 18, 24, 50, 35, 31, 44, 70, 66, 90]
+  let a = new Tree([25, 15, 10, 4, 12, 22, 18, 24, 50, 35, 31, 44, 70, 66, 90])
+  // let a = new Tree([])
+  prettyPrint(a.root)
+  
+  function log(num) {
+    console.log(num)
+  }
   
 
-  // a.insert(50);
-  // a.insert(70);
-  // a.insert(30); 
-  // a.insert(40); 
-  // a.insert(60); 
-  // a.insert(20); 
-  // a.insert(80); 
+  console.log('InOrder:')
+  a.inOrder(log)
+  a.inOrder()
 
-  // a.insert(75); 
-  // a.insert(85); 
-  // a.insert(15);
-  // a.insert(25);
-  // a.insert(35);
-  // a.insert(45);
-  // a.insert(55);
-  // a.insert(65);
-  a.delete(20)
-  // console.log('InOrder:')
-  // a.inOrder()
-  // console.log('postOrder:')
-  // a.postOrder();
-  // console.log('preOrder:')
-  // a.preOrder();
+  console.log('postOrder:')
+  a.postOrder(log);
+  a.postOrder();
+
+  console.log('preOrder:')
+  a.preOrder(log);
+  a.preOrder();
+  
   console.log('levelOrder:')
+  a.levelOrder(log);
   a.levelOrder();
 }

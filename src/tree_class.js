@@ -37,34 +37,65 @@ export default class Tree {
     this.delete = (value) => {
       console.log(`Delete value: ${value}`)
       if (this.root==null) { console.log("No such value found"); return; };
-      prettyPrint(this.root)
+      prettyPrint(this.root);
 
     };
 
+    this.levelOrder = (callback=null, node=this.root) => {
+      if (!node) {
+        if (callback) {
+          return;
+        } else {
+          console.log([]); 
+          return;
+        };
+      };
+
+      let nodesArr = [node];
+      let nodeValuesArr = [node.data];
+      let nodeQueue = new Queue();
+
+      function levelOrderRecIterator(node) {
+        if (node==null) return;
+        if (node.left) nodeQueue.enqueue(node.left);
+        if (node.right) nodeQueue.enqueue(node.right);
+        while (!nodeQueue.isEmpty()) {
+          let tempNode = nodeQueue.dequeue().value;
+          nodesArr.push(tempNode);
+          nodeValuesArr.push(tempNode.data);
+          levelOrderRecIterator(tempNode);
+        };
+      };
+      
+      levelOrderRecIterator(node);
+      callback ? nodesArr.forEach((node) => callback(node)) : console.log(nodeValuesArr);
+    };
 
     this.preOrder = (callback=null, node=this.root) => {
       let nodeValuesArr = [];
-      function recursiveIterator(callback, node) {
+
+      function preOrderRecIterator(callback, node) {
         if (node==null) return;
         callback ? callback(node) : nodeValuesArr.push(node.data);
-        recursiveIterator(callback, node.left);
-        recursiveIterator(callback, node.right);
+        preOrderRecIterator(callback, node.left);
+        preOrderRecIterator(callback, node.right);
       };
-      recursiveIterator(callback, node);
+
+      preOrderRecIterator(callback, node);
       if (!callback) console.log(nodeValuesArr);
     };   
 
     this.postOrder = (callback=null, node=this.root) => {
       let nodeStack = new Stack();
-      function recursiveIterator(node) {
+
+      function postOrderRecIterator(node) {
         if (node==null) return;       
         nodeStack.push(node);
-        recursiveIterator(node.right);
-        recursiveIterator(node.left);
-        
+        postOrderRecIterator(node.right);
+        postOrderRecIterator(node.left);
       };
-      recursiveIterator(node);
-
+      
+      postOrderRecIterator(node);
       let nodeValuesArr = [];
       while(nodeStack.length>0) {
         let tempNode = nodeStack.pop();
@@ -75,19 +106,20 @@ export default class Tree {
     };
 
     this.inOrder = (callback=null, node=this.root) => {
-      let nodeValuesArr = [];
       let nodeQueue = new Queue();
-      function recursiveIterator(node) {
+
+      function inOrderRecIterator(node) {
         if(node==null) return;
-        recursiveIterator(node.left); 
+        inOrderRecIterator(node.left); 
         nodeQueue.enqueue(node);
-        recursiveIterator(node.right); 
-      }
-      recursiveIterator(node);
-  
+        inOrderRecIterator(node.right); 
+      };
+
+      inOrderRecIterator(node);
+      let nodeValuesArr = [];
       while (!nodeQueue.isEmpty()) {
-        let tempNode = nodeQueue.dequeue().value ;
-        callback ? callback(tempNode) : nodeValuesArr.push(tempNode.data)
+        let tempNode = nodeQueue.dequeue().value;
+        callback ? callback(tempNode) : nodeValuesArr.push(tempNode.data);
       };
 
       if (!callback) console.log(nodeValuesArr);

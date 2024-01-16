@@ -1,10 +1,8 @@
 export default class Queue {
   constructor () {
     this.head = null;
-    
     this.length = 0;
 
-    
     this.enqueue = (value) => {
       if (!this.head) {
         this.head = new QueueNode(value);

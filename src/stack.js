@@ -23,9 +23,9 @@ export default class Stack {
         this.length--;
         return poppedNode;
         
-      }
-  }
-}
+      };
+  };
+};
 
 
 // testcode

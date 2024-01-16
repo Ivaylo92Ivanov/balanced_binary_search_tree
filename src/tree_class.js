@@ -41,6 +41,25 @@ export default class Tree {
 
     };
 
+    //accepts a value and returns the node with the given value
+    this.find = (value) => {
+      let tempNode = this.root;
+      let resultNode = undefined;
+      function findRec(value, node) {
+        if(node==null) return;
+        if(node.data==value) {
+          resultNode = node;
+        } else {
+          findRec(value, node.left);
+          findRec(value, node.right);
+        };
+      };
+      findRec(value, tempNode);
+
+      return resultNode;
+
+    }
+
     this.levelOrder = (callback=null, node=this.root) => {
       if (!node) {
         if (callback) {

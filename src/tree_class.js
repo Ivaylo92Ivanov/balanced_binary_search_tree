@@ -31,9 +31,9 @@ export default class Tree {
           };
         };
       }; 
+      prettyPrint(this.root);
     };
 
-    // still to implement delete function
     this.delete = (value) => {
       if (this.find(value) == undefined) { console.log("No such value in tree"); return; };
       console.log(`to delete ${value}`)

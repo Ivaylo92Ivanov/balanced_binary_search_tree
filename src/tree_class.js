@@ -10,6 +10,7 @@ export default class Tree {
     this.root = buildTree(arr);
 
     this.insert = (value) => {
+      console.log(`Insert value: ${value}`);
       if (this.root==null) { this.root=buildTree([value]); return; };
       let tempNode = this.root;
       let isPlaced = false;
@@ -35,8 +36,9 @@ export default class Tree {
     };
 
     this.delete = (value) => {
+      // if value not found in tree, return
       if (this.find(value) == undefined) { console.log("No such value in tree"); return; };
-      console.log(`to delete ${value}`)
+      console.log(`Delete value: ${value}`)
       // declaring self, so we can access 'this.root' by calling 'self.root' from inside the function scope
       let self = this; 
       let prevNode = null;
@@ -44,12 +46,15 @@ export default class Tree {
         if (rootNode==null) return;
 
         if (value<rootNode.data && rootNode.left) {
+          //if searched value is smaller than rootNode value, keep traversing left
           prevNode=rootNode;
           traverseTree(rootNode.left, value);
         } else if (value>rootNode.data && rootNode.right) {
+          //if searched value is larger than rootNode value, keep traversing right
           prevNode=rootNode;
           traverseTree(rootNode.right, value);
         } else if(rootNode.data==value) {
+          // if value has been found:
           // removing root if there are no children
           if (!rootNode.hasChildren() && prevNode==null) {
             self.root=null;
@@ -61,7 +66,14 @@ export default class Tree {
             return;
           } else if (!rootNode.left || !rootNode.right) {
             //remove a node with one child
-            !rootNode.left ? prevNode.right = rootNode.right : prevNode.left = rootNode.left;
+            if(self.root==prevNode) {
+              // if prevNode is the Tree Root, we want to always append the remaining nodes to the right side,
+              // as all values on right side of tree root are larger than itself
+              !rootNode.left ? prevNode.right = rootNode.right : prevNode.right = rootNode.left;
+            } else {
+              
+              !rootNode.left ? prevNode.right = rootNode.right : prevNode.left = rootNode.left;
+            };
             return;
           } else {
             // remove a node with two children
@@ -85,7 +97,6 @@ export default class Tree {
                 rootNode.data = tempNode.data;
                 rootNode.right = tempNode.right;
               } else {
-                console.log('here')
                 rootNode.data = tempNode.data;
                 rootNode.right = null;
               };

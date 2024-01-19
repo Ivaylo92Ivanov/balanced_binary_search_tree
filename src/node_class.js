@@ -3,6 +3,6 @@ export default class Node  {
     this.data = data;
     this.left = leftNode;
     this.right = rightNode;
-    this.hasChildren = () => { return ((this.left==null && this.right==null) ? true : false) };
+    this.hasChildren = () => { return ((this.left==null && this.right==null) ? false : true) };
   };
 };

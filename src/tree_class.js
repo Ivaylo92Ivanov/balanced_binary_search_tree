@@ -35,30 +35,88 @@ export default class Tree {
 
     // still to implement delete function
     this.delete = (value) => {
-      console.log(`Delete value: ${value}`)
-      if (this.root==null) { console.log("No such value found"); return; };
-      prettyPrint(this.root);
+      if (this.find(value) == undefined) { console.log("No such value in tree"); return; };
+      console.log(`to delete ${value}`)
+      // declaring self, so we can access 'this.root' by calling 'self.root' from inside the function scope
+      let self = this; 
+      let prevNode = null;
+      function traverseTree(rootNode, value) {
+        if (rootNode==null) return;
 
-    };
+        if (value<rootNode.data && rootNode.left) {
+          prevNode=rootNode;
+          traverseTree(rootNode.left, value);
+        } else if (value>rootNode.data && rootNode.right) {
+          prevNode=rootNode;
+          traverseTree(rootNode.right, value);
+        } else if(rootNode.data==value) {
+          // removing root if there are no children
+          if (!rootNode.hasChildren() && prevNode==null) {
+            self.root=null;
+            return;
+          } else if (!rootNode.hasChildren() && prevNode!=null) {
+            // remove a leaf node
+            if(prevNode.left==rootNode) prevNode.left=null;
+            if(prevNode.right==rootNode) prevNode.right=null;
+            return;
+          } else if (!rootNode.left || !rootNode.right) {
+            //remove a node with one child
+            !rootNode.left ? prevNode.right = rootNode.right : prevNode.left = rootNode.left;
+            return;
+          } else {
+            // remove a node with two children
+            prevNode=rootNode;
+            // go right from the 'to be deleted node' and find the most leftside node
+            let tempNode = rootNode.right;
+            while(tempNode.left!=null) { 
+              prevNode = tempNode;
+              tempNode = tempNode.left;
+            };
+            // if the most leftside node is an immediate child of 'to be deleted node'
+            if(rootNode!=prevNode) {
+              tempNode.right ? prevNode.left = tempNode.right : prevNode.left=null;
+              //swap rootNode and tempNode values
+              let newRootData = tempNode.data;
+              let newTempData = rootNode.data;
+              rootNode.data  = newRootData;
+              tempNode.data = newTempData;
+            } else {
+              if(tempNode.right) {
+                rootNode.data = tempNode.data;
+                rootNode.right = tempNode.right;
+              } else {
+                console.log('here')
+                rootNode.data = tempNode.data;
+                rootNode.right = null;
+              };
+            };
+            return;
+          };
+        };
+      };
+
+    traverseTree(this.root, value)
+    prettyPrint(this.root)
+  };
 
     //accepts a value and returns the node with the given value
     this.find = (value) => {
-      let tempNode = this.root;
       let resultNode = undefined;
-      function findRec(value, node) {
+
+      function recursiveSearch(value, node) {
         if(node==null) return;
         if(node.data==value) {
           resultNode = node;
+          return;
         } else {
-          findRec(value, node.left);
-          findRec(value, node.right);
+          recursiveSearch(value, node.left);
+          recursiveSearch(value, node.right);
         };
       };
-      findRec(value, tempNode);
 
+      recursiveSearch(value, this.root);
       return resultNode;
-
-    }
+    };
 
     this.levelOrder = (callback=null, node=this.root) => {
       if (!node) {

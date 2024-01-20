@@ -249,6 +249,16 @@ export default class Tree {
         if (tempNode==node) return depth;
       };
     };
-    
+
+    this.isBalanced = () => {
+      let leftHeight = this.height(this.root.left);
+      let rightHeight = this.height(this.root.right);
+      let difference = Math.abs(leftHeight-rightHeight);
+      console.log(leftHeight)
+      console.log(rightHeight)
+     return  (difference==0 || difference==1) ? true : false;
+      // console.log(leftHeight)
+      // console.log(rightHeight)
+    };
   };
 };

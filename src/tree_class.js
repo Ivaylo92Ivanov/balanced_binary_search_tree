@@ -213,17 +213,42 @@ export default class Tree {
     };
 
     this.height = (node) => {
-      if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return}
+      if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
 
       let leftHeight = 0;
       let leftNode = node;
-      while(leftNode) { leftNode=leftNode.left; leftHeight++; }
+      while(leftNode) { leftNode=leftNode.left; leftHeight++; };
 
       let rightHeight = 0;
       let rightNode = node;
-      while(rightNode) { rightNode=rightNode.right; rightHeight++; }
+      while(rightNode) { rightNode=rightNode.right; rightHeight++; };
 
-      return leftHeight > rightHeight ? leftHeight : rightHeight;
-    }
+      return leftHeight >= rightHeight ? leftHeight : rightHeight;
+    };
+
+    this.depth = (node) => {
+      if (!node) { console.log(`Not a valid node`); return; };
+      if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
+      if (node==this.root) return 1;
+      
+      // traverse the tree left, looking for the node
+      let depth = 1;
+      let tempNode = this.root;
+      while (tempNode.left) {
+        tempNode = tempNode.left;
+        depth++;
+        if (tempNode==node) return depth;
+      }
+
+      // if node not found on left subtree, reset temp values and traverse right
+      depth = 1
+      tempNode = this.root
+      while(tempNode.right) {
+        tempNode=tempNode.right;
+        depth++;
+        if (tempNode==node) return depth;
+      };
+    };
+    
   };
 };

@@ -71,7 +71,6 @@ export default class Tree {
               // as all values on right side of tree root are larger than itself
               !rootNode.left ? prevNode.right = rootNode.right : prevNode.right = rootNode.left;
             } else {
-              
               !rootNode.left ? prevNode.right = rootNode.right : prevNode.left = rootNode.left;
             };
             return;
@@ -213,5 +212,18 @@ export default class Tree {
       if (!callback) console.log(nodeValuesArr);
     };
 
+    this.height = (node) => {
+      if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return}
+
+      let leftHeight = 0;
+      let leftNode = node;
+      while(leftNode) { leftNode=leftNode.left; leftHeight++; }
+
+      let rightHeight = 0;
+      let rightNode = node;
+      while(rightNode) { rightNode=rightNode.right; rightHeight++; }
+
+      return leftHeight > rightHeight ? leftHeight : rightHeight;
+    }
   };
 };

@@ -32,7 +32,7 @@ export default class Tree {
           };
         };
       }; 
-      prettyPrint(this.root);
+      // prettyPrint(this.root);
     };
 
     this.delete = (value) => {
@@ -155,7 +155,11 @@ export default class Tree {
       };
       
       levelOrderRecIterator(node);
-      callback ? nodesArr.forEach((node) => callback(node)) : console.log(nodeValuesArr);
+      if(callback) {
+        nodesArr.forEach((node) => callback(node));
+      } else {
+        return nodeValuesArr;
+      };
     };
 
     this.preOrder = (callback=null, node=this.root) => {
@@ -169,7 +173,7 @@ export default class Tree {
       };
 
       preOrderRecIterator(callback, node);
-      if (!callback) console.log(nodeValuesArr);
+      if (!callback) return nodeValuesArr;
     };   
 
     this.postOrder = (callback=null, node=this.root) => {
@@ -189,7 +193,7 @@ export default class Tree {
         callback ? callback(tempNode) : nodeValuesArr.push(tempNode.data);
       };
 
-      if(!callback) console.log(nodeValuesArr);
+      if(!callback) return nodeValuesArr;
     };
 
     this.inOrder = (callback=null, node=this.root) => {
@@ -209,23 +213,23 @@ export default class Tree {
         callback ? callback(tempNode) : nodeValuesArr.push(tempNode.data);
       };
 
-      if (!callback) console.log(nodeValuesArr);
+      if (!callback) return nodeValuesArr;
     };
-
+    
     this.height = (node) => {
+      if (!node) { console.log(`Not a valid node`); return; };
       if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
+      
+      function recursiveHeight(tree) {
+        if (!tree) return 0;
+        return Math.max(recursiveHeight(tree.left), recursiveHeight(tree.right)) + 1;
+      };
 
-      let leftHeight = 0;
-      let leftNode = node;
-      while(leftNode) { leftNode=leftNode.left; leftHeight++; };
-
-      let rightHeight = 0;
-      let rightNode = node;
-      while(rightNode) { rightNode=rightNode.right; rightHeight++; };
-
-      return leftHeight >= rightHeight ? leftHeight : rightHeight;
+      let height = recursiveHeight(node)
+      return height
     };
 
+    // wrong - it only goes left-left or right-right
     this.depth = (node) => {
       if (!node) { console.log(`Not a valid node`); return; };
       if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
@@ -251,14 +255,18 @@ export default class Tree {
     };
 
     this.isBalanced = () => {
-      let leftHeight = this.height(this.root.left);
-      let rightHeight = this.height(this.root.right);
-      let difference = Math.abs(leftHeight-rightHeight);
+      if(this.root==null || !this.root.hasChildren()) return true; 
+      let leftHeight = this.root.left ? this.height(this.root.left) : 0;
+      let rightHeight = this.root.right ? this.height(this.root.right) : 0;
       console.log(leftHeight)
       console.log(rightHeight)
+      let difference = Math.abs(leftHeight-rightHeight);
      return  (difference==0 || difference==1) ? true : false;
-      // console.log(leftHeight)
-      // console.log(rightHeight)
+    };
+
+    this.rebalance = () => {
+      let arrOfValues = this.inOrder();
+      this.root = buildTree(arrOfValues); 
     };
   };
 };

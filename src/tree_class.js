@@ -215,7 +215,7 @@ export default class Tree {
 
       if (!callback) return nodeValuesArr;
     };
-    
+
     this.height = (node) => {
       if (!node) { console.log(`Not a valid node`); return; };
       if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
@@ -229,37 +229,35 @@ export default class Tree {
       return height
     };
 
-    // wrong - it only goes left-left or right-right
     this.depth = (node) => {
       if (!node) { console.log(`Not a valid node`); return; };
       if (this.find(node.data)==undefined) { console.log(`No node with value ${node.data} has been found`); return; };
-      if (node==this.root) return 1;
       
-      // traverse the tree left, looking for the node
-      let depth = 1;
-      let tempNode = this.root;
-      while (tempNode.left) {
-        tempNode = tempNode.left;
-        depth++;
-        if (tempNode==node) return depth;
-      }
+      let currentLevelQueue = new Queue();
+      let nextLevelQueue = new Queue();
+      let depth = 0;
+      let tempNode;
 
-      // if node not found on left subtree, reset temp values and traverse right
-      depth = 1
-      tempNode = this.root
-      while(tempNode.right) {
-        tempNode=tempNode.right;
-        depth++;
+      currentLevelQueue.enqueue(this.root);
+      while(!currentLevelQueue.isEmpty()) {
+        tempNode = currentLevelQueue.dequeue().value;
         if (tempNode==node) return depth;
+        if (tempNode.left) nextLevelQueue.enqueue(tempNode.left);
+        if (tempNode.right) nextLevelQueue.enqueue(tempNode.right);
+        if (currentLevelQueue.isEmpty()) {
+          currentLevelQueue = nextLevelQueue;
+          nextLevelQueue = new Queue();
+          depth++;
       };
     };
+
+    return depth;
+  };
 
     this.isBalanced = () => {
       if(this.root==null || !this.root.hasChildren()) return true; 
       let leftHeight = this.root.left ? this.height(this.root.left) : 0;
       let rightHeight = this.root.right ? this.height(this.root.right) : 0;
-      console.log(leftHeight)
-      console.log(rightHeight)
       let difference = Math.abs(leftHeight-rightHeight);
      return  (difference==0 || difference==1) ? true : false;
     };

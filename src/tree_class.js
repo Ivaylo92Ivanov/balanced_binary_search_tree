@@ -107,9 +107,8 @@ export default class Tree {
 
     traverseTree(this.root, value)
     prettyPrint(this.root)
-  };
+    };
 
-    //accepts a value and returns the node with the given value
     this.find = (value) => {
       let resultNode = undefined;
 

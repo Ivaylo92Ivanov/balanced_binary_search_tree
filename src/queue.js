@@ -1,3 +1,10 @@
+class QueueNode {
+  constructor(value=null, next=null) {
+    this.value = value;
+    this.next = next;
+  };
+};
+
 export default class Queue {
   constructor () {
     this.head = null;
@@ -32,16 +39,3 @@ export default class Queue {
   };
 };
 
-
-class QueueNode {
-  constructor(value=null, next=null) {
-    this.value = value;
-    this.next = next;
-  };
-};
-
-let a = new Queue();
-a.enqueue(1)
-a.enqueue(2)
-a.enqueue(3)
-a.enqueue(4)

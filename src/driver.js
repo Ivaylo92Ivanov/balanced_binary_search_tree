@@ -5,9 +5,9 @@ import prettyPrint from "./prettyPrint";
 export default function driver() {
 
   // 1. Create a binary search tree from an array of random numbers < 100. You can create a function that returns an array of random numbers every time you call it if you wish.
-  let numberOfValues = Math.floor(Math.random() * 20) + 10;
+  let numberOfInitialValues = Math.floor(Math.random() * 20) + 10;
   let initialValuesSet = new Set();
-  while( initialValuesSet.size<numberOfValues ) { initialValuesSet.add(Math.floor(Math.random() * 99) +1) };
+  while( initialValuesSet.size<numberOfInitialValues ) { initialValuesSet.add(Math.floor(Math.random() * 99) +1) };
   let initialArr = Array.from(initialValuesSet);
   let tree = new Tree(initialArr);
   prettyPrint(tree.root);
@@ -22,9 +22,9 @@ export default function driver() {
   console.log('In order: ' + tree.inOrder());
 
   // 4. Unbalance the tree by adding several numbers > 100.
-  numberOfValues = Math.floor((Math.random() * 10) + 5);
+  let numberOfExtraValues = Math.floor((Math.random() * 10) + 5);
   let extraValuesSet = new Set();
-  while(extraValuesSet.size<numberOfValues) (extraValuesSet.add((Math.floor(Math.random() * 100) +100)));
+  while(extraValuesSet.size<numberOfExtraValues) (extraValuesSet.add((Math.floor(Math.random() * 100) +100)));
   let extraArr = Array.from(extraValuesSet);
   extraArr.forEach( (value) => tree.insert(value) );
   prettyPrint(tree.root);
